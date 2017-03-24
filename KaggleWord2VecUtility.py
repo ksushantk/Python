@@ -59,3 +59,24 @@ class KaggleWord2VecUtility(object):
         # Return the list of sentences (each sentence is a list of words,
         # so this returns a list of lists
         return sentences
+    
+    def get_bigrams(myString):
+    tokenizer = WordPunctTokenizer()
+    tokens = tokenizer.tokenize(myString)
+    bigram_finder = BigramCollocationFinder.from_words(tokens)
+    bigrams = bigram_finder.nbest(BigramAssocMeasures.chi_sq, 500)
+    for bigram_tuple in bigrams:
+        x = "%s %s" % bigram_tuple
+        tokens.append(x)
+    result = [' '.join([(w).lower() for w in x.split()]) for x in tokens]
+    return result
+
+    doc = 'my name is sushant kulkarni. i work at tiger analytics. am interested in mutual funds'
+    doc = re.sub(r'[#@%[\]\(\)\!`~$^&.*]', '', doc)
+    find = ['sushant', 'sushant kulkarni', 'tiger analytics', 'mutual funds', 'interested']
+    bi_grams = get_bigrams(doc)
+    trigram = ngrams(doc.split(), 3)
+    trigrams = [ ' '.join(grams) for grams in trigram]
+    n_gram = bi_grams + trigrams
+    cnt = ".".join([i for i in find if i in n_gram])
+    test = cnt.split(".")
